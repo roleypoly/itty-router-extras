@@ -10,9 +10,7 @@ const withCors =
             } = options
             const referer = request.headers.get('Referer')
             const url = new URL(referer)
-            const allowedOrigin = url.origin.match(
-                /[^\w](slick\.af)|(localhost:3000)$/
-            )
+            const allowedOrigin = url.origin.match(/[^\w](slick\.af)|(localhost:3000)$/)
                 ? url.origin
                 : 'https://slick.af'
             const corsHeaders = {
