@@ -1,19 +1,20 @@
 const watch = (predicate, fn) => request => {
-  request.proxy = new Proxy(request.proxy || request, {
-    set: (obj, prop, value) => {
-      obj[prop] = value
+    request.proxy = new Proxy(request.proxy || request, {
+        set: (obj, prop, value) => {
+            obj[prop] = value
 
-      const passes = typeof predicate === 'function'
-      ? predicate(prop, obj)
-      : obj.hasOwnProperty(prop)
+            const passes =
+                typeof predicate === 'function'
+                    ? predicate(prop, obj)
+                    : obj.hasOwnProperty(prop)
 
-      if (passes) {
-        fn(value, prop, request)
-      }
+            if (passes) {
+                fn(value, prop, request)
+            }
 
-      return true
-    }
-  })
+            return true
+        },
+    })
 }
 
 module.exports = { watch }
