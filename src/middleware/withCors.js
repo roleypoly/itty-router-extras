@@ -1,47 +1,48 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const withCors =
     (options = {}) =>
-    request => {
-        const {
-            origin = '*',
-            methods = 'GET, POST, PATCH, DELETE',
-            headers = 'authorization, referer, origin, content-type',
-            credentials = false,
-        } = options
-        const referer = request.headers.get('Referer')
-        const url = new URL(referer)
-        const allowedOrigin = url.origin.match(
-            /[^\w](slick\.af)|(localhost:3000)$/
-        )
-            ? url.origin
-            : 'https://slick.af'
-        const corsHeaders = {
-            'Access-Control-Allow-Origin': origin,
-            'Access-Control-Allow-Methods': methods,
-            'Access-Control-Allow-Headers': headers,
-        }
+        request => {
+            const {
+                origin = '*',
+                methods = 'GET, POST, PATCH, DELETE',
+                headers = 'authorization, referer, origin, content-type',
+                credentials = false,
+            } = options
+            const referer = request.headers.get('Referer')
+            const url = new URL(referer)
+            const allowedOrigin = url.origin.match(
+                /[^\w](slick\.af)|(localhost:3000)$/
+            )
+                ? url.origin
+                : 'https://slick.af'
+            const corsHeaders = {
+                'Access-Control-Allow-Origin': origin,
+                'Access-Control-Allow-Methods': methods,
+                'Access-Control-Allow-Headers': headers,
+            }
 
-        if (allowCredentials) {
-            corsHeaders['Access-Control-Allow-Credentials'] = 'true'
-        }
+            if (allowCredentials) {
+                corsHeaders['Access-Control-Allow-Credentials'] = 'true'
+            }
 
-        if (
-            request.headers.get('Origin') !== null &&
-            request.headers.get('Access-Control-Request-Method') !== null
-        ) {
-            // Handle CORS pre-flight request.
+            if (
+                request.headers.get('Origin') !== null &&
+                request.headers.get('Access-Control-Request-Method') !== null
+            ) {
+                // Handle CORS pre-flight request.
+                return new Response(null, {
+                    status: 204,
+                    headers: corsHeaders,
+                })
+            }
+
+            // Handle standard OPTIONS request.
             return new Response(null, {
-                status: 204,
-                headers: corsHeaders,
+                headers: {
+                    Allow: `${methods} , HEAD, OPTIONS`,
+                },
             })
         }
-
-        // Handle standard OPTIONS request.
-        return new Response(null, {
-            headers: {
-                Allow: `${methods} , HEAD, OPTIONS`,
-            },
-        })
-    }
 
 const addCorsHeaders = request => response => {
     let allowedOrigin = 'https://slick.af'

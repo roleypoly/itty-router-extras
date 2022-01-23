@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('isomorphic-fetch')
 
 const { ThrowableRouter } = require('../router/ThrowableRouter')
